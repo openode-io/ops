@@ -1,0 +1,15 @@
+
+# self signed cert
+openssl req -x509 -newkey rsa:4096 -sha256 -nodes -keyout tls.key -out tls.crt -subj "/CN=example.com" -days 365
+
+# create a secret with the cert
+kubectl create secret tls example-com-tls --cert=tls.crt --key=tls.key
+
+# get the secret kubectl get secret example-com-tls -o yaml
+
+# gen key
+openssl genrsa -out ca.key 2048
+
+openssl req -x509 -new -nodes -key ca.key -sha256 -subj "/CN=sampleissuer.local" -days 1024 -out ca.crt -extensions v3_ca -config /etc/ssl/openssl.cnf
+
+kubectl create secret tls ca-key-pair --key=ca.key --cert=ca.crt
