@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kuard
+spec:
+  selector:
+    matchLabels:
+      app: kuard
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: kuard
+    spec:
+      containers:
+      - image: openode/openode_prod:nodetest #gcr.io/kuar-demo/kuard-amd64:1
+        imagePullPolicy: Always
+        name: kuard
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: regcred

@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: kuard
+  annotations:
+    kubernetes.io/ingress.class: "nginx"    
+    cert-manager.io/issuer: "letsencrypt-prod"
+
+spec:
+  tls:
+  - hosts:
+    - myprettyprettytest1122.openode.io
+    secretName: quickstart-example-tls2
+  rules:
+  - host: 6ojq5t5np0.lb.c1.bhs5.k8s.ovh.net # nginx controller external ip
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: kuard
+          servicePort: 80
+  - host: myprettyprettytest1122.openode.io
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: kuard
+          servicePort: 80
