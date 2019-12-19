@@ -1,0 +1,22 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kuard2
+  namespace: ns-kuard2
+spec:
+  selector:
+    matchLabels:
+      app: kuard2
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: kuard2
+    spec:
+      containers:
+      - image: gcr.io/kuar-demo/kuard-amd64:1
+        imagePullPolicy: Always
+        name: kuard2
+        ports:
+        - containerPort: 8080
