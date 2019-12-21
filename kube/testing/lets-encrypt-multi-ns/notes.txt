@@ -1,17 +1,6 @@
 
-# install cert-manager in cert manager ns
-helm install cert-manager   --namespace cert-manager   --version v0.12.0   jetstack/cert-manager
 
-# verify installation 
-kubectl get pods --namespace cert-manager
-
-# verify issuer working
-kubectl describe issuer letsencrypt-staging
-
-# Access the dashboard
-kubectl proxy
-
-# get the secret token
-kubectl -n kube-system describe secrets \
-   `kubectl -n kube-system get secrets | awk '/clusterrole-aggregation-controller/ {print $1}'` \
-       | awk '/token:/ {print $2}'
+# copy the docker registry secret to namespace
+kubectl get secret regcred -n default -o yaml \
+| sed s/"namespace: default"/"namespace: ns-kuard1"/\
+| kubectl apply -n ns-kuard1 -f -

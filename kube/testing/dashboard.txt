@@ -1,0 +1,16 @@
+
+# doc 
+https://docs.ovh.com/gb/en/kubernetes/installing-kubernetes-dashboard/
+
+# install dashboard
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta6/aio/deploy/recommended.yaml
+
+# get admin user token for dashboard
+kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user-token | awk '{print $1}')
+
+kubectl proxy
+
+# Access it 
+http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
+
+
