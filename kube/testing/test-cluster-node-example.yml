@@ -15,14 +15,17 @@ spec:
       labels:
         app: kuard1
     spec:
-      
+      initContainers:
+      - name: init-volume
+        image: busybox
+        command: ['sh', '-c', 'chmod 777 /opt/app/data']
+        volumeMounts:
+        - mountPath: "/opt/app/data"
+          name: test-volume
       containers:
-      
       - image: gcr.io/kuar-demo/kuard-amd64:1
         imagePullPolicy: Always
         name: kuard1
-        securityContext:
-          runAsUser: 0
         ports:
         - containerPort: 8080
         livenessProbe:
