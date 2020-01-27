@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: test-pvc
+  name: main-pvc
   namespace: ns-kuard1
 spec:
   accessModes:

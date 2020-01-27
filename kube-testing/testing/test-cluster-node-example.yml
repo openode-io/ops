@@ -1,0 +1,88 @@
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kuard1
+  namespace: ns-kuard1
+spec:
+  selector:
+    matchLabels:
+      app: kuard1
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: kuard1
+    spec:
+      volumes:
+      - name: main-volume
+        persistentVolumeClaim:
+          claimName: main-pvc
+      initContainers:
+      - name: init-volume
+        image: busybox
+        command: ['sh', '-c', 'chmod 777 /opt/app/data']
+        volumeMounts:
+        - mountPath: "/opt/app/data"
+          name: main-volume
+      containers:
+      - image: gcr.io/kuar-demo/kuard-amd64:1
+        imagePullPolicy: Always
+        name: kuard1
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /healthy
+            port: 8080
+          initialDelaySeconds: 120
+          periodSeconds: 600
+          timeoutSeconds: 3
+          failureThreshold: 1
+        readinessProbe:
+          httpGet:
+            path: /healthy
+            port: 8080
+          periodSeconds: 10
+          initialDelaySeconds: 5
+        volumeMounts:
+        - mountPath: "/opt/app/data"
+          name: main-volume
+      
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kuard1
+  namespace: ns-kuard1
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+  selector:
+    app: kuard1
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: kuard1
+  namespace: ns-kuard1
+  #annotations:
+  #  kubernetes.io/ingress.class: "nginx"    
+  #  cert-manager.io/cluster-issuer: "letsencrypt-prod"
+
+spec:
+  #tls:
+  #- hosts:
+  #  - node110.nodetests.openode2.io
+  #  secretName: letsencrypt-prod-node-110
+  rules:
+  - host: node110.nodetests.openode2.io
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: kuard1
+          servicePort: 80
