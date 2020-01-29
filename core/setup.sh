@@ -43,8 +43,11 @@ echo "activating ufw"
 yes | ufw enable
 
 echo "Node.js"
-apt-get install -y nodejs
-apt-get install -y npm
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh | bash
+source /root/.bashrc
+nvm install 12
+npm i -g yarn
+
 npm i -g pm2
 pm2 list
 
@@ -60,14 +63,21 @@ echo "installing mysql server"
 apt install -y mysql-server
 
 echo "----------------- EXECUTE IN MYSQL"
-echo "USE mysql; UPDATE user SET plugin='mysql_native_password' WHERE User='root'; FLUSH PRIVILEGES; exit;"
+echo "USE mysql; UPDATE user SET plugin='mysql_native_password' WHERE User='root'; FLUSH PRIVILEGES; "
 mysql -u root
 
 systemctl restart mysql.service
 mysql_secure_installation
 
+echo "Import the database, make sure to have /var/www/openode.sql"
+read -p "Press enter to continue"
+mysql -u root -p  < /var/www/openode.sql
+
 ### NGINX
 apt install -y nginx
+
+echo "** Copy core certs openode.io.crt privatekey.key"
+read -p "Press enter to continue"
 
 ### rvm, ruby
 gpg --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
@@ -86,6 +96,8 @@ cd /var/www/openode-www
 bundle install
 cp .test.env .production.env
 vi .production.env
+yarn
+RAILS_ENV=production rails assets:precompile
 
 echo "** Copy openode-www .production.env, config/master.key, config/credentials.yml.enc"
 read -p "Press enter to continue"
@@ -97,3 +109,12 @@ cd scripts
 pm2 start node-start.json
 pm2 save
 pm2 startup # ensure start on boot
+
+###########################################################
+# openode-api
+# 
+cd /var/www
+git clone https://github.com/openode-io/openode-api.git
+cd /var/www/openode-api
+apt install -y libmysqlclient-dev
+bundle install
