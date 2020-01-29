@@ -44,6 +44,9 @@ yes | ufw enable
 
 echo "Node.js"
 apt-get install -y nodejs
+apt-get install -y npm
+npm i -g pm2
+pm2 list
 
 ###########################################################
 # Internal services
@@ -57,7 +60,7 @@ echo "installing mysql server"
 apt install -y mysql-server
 
 echo "----------------- EXECUTE IN MYSQL"
-echo "USE mysql; UPDATE user SET plugin='mysql_native_password' WHERE User='root'; FLUSH PRIVILEGES; "
+echo "USE mysql; UPDATE user SET plugin='mysql_native_password' WHERE User='root'; FLUSH PRIVILEGES; exit;"
 mysql -u root
 
 systemctl restart mysql.service
@@ -71,6 +74,8 @@ gpg --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703
 \curl -sSL https://get.rvm.io | bash -s stable
 source /etc/profile.d/rvm.sh
 rvm install 2.7.0
+echo '' >> ~/.bashrc
+echo 'source /etc/profile.d/rvm.sh' >> ~/.bashrc
 
 ###########################################################
 # openode-www
@@ -78,5 +83,17 @@ rvm install 2.7.0
 cd /var/www
 git clone https://github.com/openode-io/openode-www.git
 cd /var/www/openode-www
+bundle install
 cp .test.env .production.env
 vi .production.env
+
+echo "** Copy openode-www .production.env, config/master.key, config/credentials.yml.enc"
+read -p "Press enter to continue"
+
+echo "verify openode-www setup properly:"
+echo "puts 'ok'" | RAILS_ENV=production rails c
+
+cd scripts
+pm2 start node-start.json
+pm2 save
+pm2 startup # ensure start on boot
