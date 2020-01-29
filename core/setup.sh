@@ -42,14 +42,41 @@ ufw allow ntp
 echo "activating ufw"
 yes | ufw enable
 
+echo "Node.js"
+apt-get install -y nodejs
+
 ###########################################################
 # Internal services
 
+### Redis
 echo "installing redis"
 apt install -y redis-server
 
+### Mysql
 echo "installing mysql server"
 apt install -y mysql-server
-mysql -h127.0.0.1 -uroot -e"USE mysql; UPDATE user SET plugin='mysql_native_password' WHERE User='root'; FLUSH PRIVILEGES; "
+
+echo "----------------- EXECUTE IN MYSQL"
+echo "USE mysql; UPDATE user SET plugin='mysql_native_password' WHERE User='root'; FLUSH PRIVILEGES; "
+mysql -u root
+
 systemctl restart mysql.service
 mysql_secure_installation
+
+### NGINX
+apt install -y nginx
+
+### rvm, ruby
+gpg --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
+\curl -sSL https://get.rvm.io | bash -s stable
+source /etc/profile.d/rvm.sh
+rvm install 2.7.0
+
+###########################################################
+# openode-www
+# 
+cd /var/www
+git clone https://github.com/openode-io/openode-www.git
+cd /var/www/openode-www
+cp .test.env .production.env
+vi .production.env
