@@ -75,6 +75,7 @@ mysql -u root -p  < /var/www/openode.sql
 
 ### NGINX
 apt install -y nginx
+cp configs/nginx.conf /etc/nginx/nginx.conf
 
 echo "** Copy core certs openode.io.crt privatekey.key"
 read -p "Press enter to continue"
@@ -105,6 +106,7 @@ read -p "Press enter to continue"
 echo "verify openode-www setup properly:"
 echo "puts 'ok'" | RAILS_ENV=production rails c
 
+# pm2
 cd scripts
 pm2 start node-start.json
 pm2 save
@@ -118,3 +120,15 @@ git clone https://github.com/openode-io/openode-api.git
 cd /var/www/openode-api
 apt install -y libmysqlclient-dev
 bundle install
+
+echo "** Copy openode-api .production.env, config/*"
+read -p "Press enter to continue"
+
+echo "verify openode-api setup properly:"
+echo "puts 'ok'" | RAILS_ENV=production rails c
+
+# pm2
+cd scripts
+pm2 start node-start.json
+pm2 save
+pm2 startup # ensure start on boot
