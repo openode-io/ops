@@ -127,6 +127,9 @@ read -p "Press enter to continue"
 echo "verify openode-api setup properly:"
 echo "puts 'ok'" | RAILS_ENV=production rails c
 
+echo "Migrating the data"
+RAILS_ENV=production rails db:migrate
+
 # pm2
 cd scripts
 pm2 start node-start.json
