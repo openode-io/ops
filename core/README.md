@@ -3,6 +3,7 @@
 
 Consists of:
 
+- NGINX
 - redis-server
 - mysql-server
 - openode-www
