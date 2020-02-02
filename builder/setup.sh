@@ -16,6 +16,21 @@ sudo apt-get upgrade -y
 echo "apt autoremove again..."
 sudo apt autoremove -y
 
+echo "installing fail2ban"
+sudo apt install -y fail2ban
+
+sudo cp configs/jail.conf /etc/fail2ban/jail.conf
+sudo /etc/init.d/fail2ban restart
+sudo /etc/init.d/fail2ban status
+
+echo "installing ufw"
+sudo apt install -y ufw
+
+sudo ufw allow 22
+
+echo "activating ufw"
+yes | sudo ufw enable
+
 #################
 # Docker
 sudo apt install -y docker.io
