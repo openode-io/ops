@@ -135,3 +135,16 @@ cd scripts
 pm2 start node-start.json
 pm2 save
 pm2 startup # ensure start on boot
+
+#############################################################
+# Datadog
+echo "Go to https://app.datadoghq.com/account/settings#agent/ubuntu"
+echo "IMPORTANT: enabled logs (logs_enabled) in /etc/datadog-agent/datadog.yaml"
+read -p "Press enter to continue when installed"
+sudo mkdir -p /etc/datadog-agent/conf.d/ruby.d
+sudo cp configs/datadog_ruby_logs.yaml /etc/datadog-agent/conf.d/ruby.d/conf.yaml
+sudo chown -R dd-agent:dd-agent /etc/datadog-agent/conf.d/ruby.d
+sudo systemctl start datadog-agent
+sudo service datadog-agent status
+
+sudo mkdir -p /etc/datadog-agent/conf.d/ruby.d

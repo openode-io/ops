@@ -1,0 +1,18 @@
+# Log Information
+logs:
+  - type: file
+    path: /var/www/openode-www/scripts/pm2/out.log
+    source: ruby
+    service: openode-www
+  - type: file
+    path: /var/www/openode-www/scripts/pm2/err.log
+    source: ruby
+    service: openode-www
+  - type: file
+    path: /var/www/openode-api/scripts/pm2/out.log
+    source: ruby
+    service: openode-api
+  - type: file
+    path: /var/www/openode-api/scripts/pm2/err.log
+    source: ruby
+    service: openode-api
