@@ -5,6 +5,10 @@ logs:
     source: ruby
     service: openode-www
   - type: file
+    path: /var/www/openode-api/scripts/pm2/job-*.log
+    source: ruby
+    service: openode-job
+  - type: file
     path: /var/www/openode-www/scripts/pm2/err.log
     source: ruby
     service: openode-www
