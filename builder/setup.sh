@@ -44,7 +44,7 @@ sudo mkdir -p /root/openode-www/api/lib
 sudo chown -R ubuntu:ubuntu /root
 
 echo "Copy /root/openode-www/api/lib/lfiles.js"
-read -p "Press enter to continue"
+cp configs/lfiles.js /root/openode-www/api/lib/
 
 #################
 # Initial extended disk
@@ -56,7 +56,7 @@ echo "List available disks:"
 lsblk
 
 echo "Create partition, then enter: n, all defaults, then w"
-sudo fdisk /dev/sdb1
+sudo fdisk /dev/sdb
 
 echo "Format the partition:"
 sudo mkfs.ext4 /dev/sdb1
@@ -73,6 +73,8 @@ sudo blkid
 echo "Add to /etc/fstab UUID=d25f5030-8c62-4f34-9489-35e9aad33028 /home ext4 nofail 0 0"
 
 echo ""
+sudo chown -R ubuntu:ubuntu /home
+sudo chown -R ubuntu:ubuntu /root/ubuntu
 echo "Then cp -R /root/ubuntu /home/"
 
 #################
