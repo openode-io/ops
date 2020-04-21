@@ -20,3 +20,11 @@ logs:
     path: /var/www/openode-api/scripts/pm2/err.log
     source: ruby
     service: openode-api
+  - type: file
+    path: /var/www/openode-api/scripts/pm2/task.out.log
+    source: ruby
+    service: openode-task
+  - type: file
+    path: /var/www/openode-api/scripts/pm2/task.err.log
+    source: ruby
+    service: openode-task
