@@ -56,7 +56,10 @@ echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/
 sudo apt-get update
 sudo apt-get install -y kubectl
 
+sudo mkdir /home/tmp
+sudo chmod -R 777 /home/tmp
 sudo chown -R ubuntu:ubuntu /home
+
 
 echo "!!!"
 echo "ensure builder_kubeconfig_path (in .production.openode.yml) to the proper locations"
