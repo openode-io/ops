@@ -148,3 +148,7 @@ sudo systemctl start datadog-agent
 sudo service datadog-agent status
 
 sudo mkdir -p /etc/datadog-agent/conf.d/ruby.d
+
+# for kube tmp files
+sudo mkdir /home/tmp
+sudo chmod -R 777 /home/tmp
