@@ -27,12 +27,18 @@ echo "installing ufw"
 sudo apt install -y ufw
 
 sudo ufw allow 22
+sudo ufw allow 80
+sudo ufw allow 443
 
 echo "activating ufw"
 yes | sudo ufw enable
 
 echo "installing zip"
 sudo apt install -y zip
+
+echo "installing NGINX"
+sudo apt install -y nginx
+sudo cp configs/nginx.conf /etc/nginx/nginx.conf
 
 #################
 # Docker
