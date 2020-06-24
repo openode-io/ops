@@ -31,6 +31,9 @@ sudo ufw allow 22
 echo "activating ufw"
 yes | sudo ufw enable
 
+echo "installing zip"
+sudo apt install -y zip
+
 #################
 # Docker
 sudo apt install -y docker.io
