@@ -1,0 +1,1 @@
+KUBECONFIG=development-test.yml helm delete nginx-ingress

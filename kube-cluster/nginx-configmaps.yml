@@ -1,6 +1,7 @@
 apiVersion: v1
 data:
   use-proxy-protocol: "true"
+  # max-worker-open-files: "100000"
 kind: ConfigMap
 metadata:
-  name: nginx-ingress-controller
+  name: nginx-ingress-ingress-nginx-controller
