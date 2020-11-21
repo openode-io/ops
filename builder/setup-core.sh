@@ -69,6 +69,9 @@ sudo mkdir /home/tmp
 sudo chmod -R 777 /home/tmp
 sudo chown -R ubuntu:ubuntu /home
 
+# install openode cli
+sudo apt install npm
+npm i -g openode
 
 echo "!!!"
 echo "ensure builder_kubeconfig_path (in .production.openode.yml) to the proper locations"
